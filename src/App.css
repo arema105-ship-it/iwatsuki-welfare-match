@@ -523,6 +523,40 @@ body {
   color: var(--color-text-muted);
 }
 
+.detail-source {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.hours-table {
+  margin-top: 1rem;
+}
+
+.hours-table h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.detail-section-additional {
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.additional-info-empty {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.info-list a {
+  color: var(--color-primary);
+  word-break: break-all;
+}
+
 .detail-body {
   padding: 1.25rem 1.5rem;
   display: flex;

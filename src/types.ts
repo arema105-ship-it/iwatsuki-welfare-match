@@ -8,24 +8,47 @@ export interface UserPreferences {
   futureGoal: string;
 }
 
+/** WAM NET オープンデータ（CSV）から取得した事業所情報 */
+export interface FacilityCsvData {
+  facilityNumber: string;
+  name: string;
+  nameKana: string;
+  corporationName: string;
+  addressCity: string;
+  addressStreet: string;
+  phone: string | null;
+  fax: string | null;
+  url: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  hoursWeekday: string | null;
+  hoursSaturday: string | null;
+  hoursSunday: string | null;
+  hoursHoliday: string | null;
+  regularHoliday: string | null;
+  weekdayNotes: string | null;
+  capacity: number | null;
+  serviceType: string;
+}
+
+/**
+ * マッチング用の追加情報（CSVに存在しない項目）
+ * 未登録の場合は null
+ */
+export interface FacilityAdditionalInfo {
+  workContents: string[] | null;
+  atmosphere: 'quiet' | 'lively' | null;
+  minDays: number | null;
+  maxDays: number | null;
+  hasTransport: boolean | null;
+  futureSupport: string[] | null;
+  isFull: boolean | null;
+}
+
 export interface Facility {
   id: string;
-  name: string;
-  address: string;
-  description: string;
-  workContents: string[];
-  atmosphere: 'quiet' | 'lively';
-  minDays: number;
-  maxDays: number;
-  hasTransport: boolean;
-  futureSupport: string[];
-  isFull: boolean;
-  capacity: number;
-  currentUsers: number;
-  features: string[];
-  phone: string;
-  hours: string;
-  imageEmoji: string;
+  csv: FacilityCsvData;
+  additionalInfo: FacilityAdditionalInfo;
 }
 
 export interface MatchResult {
@@ -58,3 +81,19 @@ export const ATTENDANCE_DAY_OPTIONS = [
   { value: 4, label: '週4日' },
   { value: 5, label: '週5日' },
 ] as const;
+
+export function getFacilityAddress(facility: Facility): string {
+  return `${facility.csv.addressCity}${facility.csv.addressStreet}`;
+}
+
+export function hasAdditionalInfo(info: FacilityAdditionalInfo): boolean {
+  return (
+    info.workContents !== null ||
+    info.atmosphere !== null ||
+    info.minDays !== null ||
+    info.maxDays !== null ||
+    info.hasTransport !== null ||
+    info.futureSupport !== null ||
+    info.isFull !== null
+  );
+}

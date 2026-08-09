@@ -6,7 +6,10 @@ const ATMOSPHERE_LABELS: Record<string, string> = {
 };
 
 function scoreWorkContent(facility: Facility, pref: UserPreferences): { score: number; reason: string | null } {
-  if (facility.workContents.includes(pref.workContent)) {
+  const workContents = facility.additionalInfo.workContents;
+  if (!workContents) return { score: 0, reason: null };
+
+  if (workContents.includes(pref.workContent)) {
     return {
       score: 30,
       reason: `「${pref.workContent}」の作業メニューがあります`,
@@ -16,10 +19,13 @@ function scoreWorkContent(facility: Facility, pref: UserPreferences): { score: n
 }
 
 function scoreAtmosphere(facility: Facility, pref: UserPreferences): { score: number; reason: string | null } {
+  const atmosphere = facility.additionalInfo.atmosphere;
+  if (!atmosphere) return { score: 0, reason: null };
+
   if (pref.atmosphere === 'either') {
     return { score: 15, reason: '雰囲気のご希望に柔軟に対応できます' };
   }
-  if (facility.atmosphere === pref.atmosphere) {
+  if (atmosphere === pref.atmosphere) {
     const label = ATMOSPHERE_LABELS[pref.atmosphere];
     return { score: 20, reason: `「${label}」な雰囲気で、ご希望に合っています` };
   }
@@ -27,30 +33,38 @@ function scoreAtmosphere(facility: Facility, pref: UserPreferences): { score: nu
 }
 
 function scoreAttendanceDays(facility: Facility, pref: UserPreferences): { score: number; reason: string | null } {
-  if (pref.attendanceDays >= facility.minDays && pref.attendanceDays <= facility.maxDays) {
+  const { minDays, maxDays } = facility.additionalInfo;
+  if (minDays === null || maxDays === null) return { score: 0, reason: null };
+
+  if (pref.attendanceDays >= minDays && pref.attendanceDays <= maxDays) {
     return {
       score: 20,
-      reason: `週${pref.attendanceDays}日の通所に対応しています（週${facility.minDays}〜${facility.maxDays}日）`,
+      reason: `週${pref.attendanceDays}日の通所に対応しています（週${minDays}〜${maxDays}日）`,
     };
   }
-  if (pref.attendanceDays < facility.minDays) {
+  if (pref.attendanceDays < minDays) {
     return { score: 5, reason: null };
   }
   return { score: 0, reason: null };
 }
 
 function scoreTransport(facility: Facility, pref: UserPreferences): { score: number; reason: string | null } {
+  const hasTransport = facility.additionalInfo.hasTransport;
   if (!pref.needsTransport) {
     return { score: 10, reason: null };
   }
-  if (facility.hasTransport) {
+  if (hasTransport === null) return { score: 0, reason: null };
+  if (hasTransport) {
     return { score: 15, reason: '送迎サービスに対応しています' };
   }
   return { score: 0, reason: null };
 }
 
 function scoreFutureGoal(facility: Facility, pref: UserPreferences): { score: number; reason: string | null } {
-  if (facility.futureSupport.includes(pref.futureGoal)) {
+  const futureSupport = facility.additionalInfo.futureSupport;
+  if (!futureSupport) return { score: 0, reason: null };
+
+  if (futureSupport.includes(pref.futureGoal)) {
     return {
       score: 15,
       reason: `「${pref.futureGoal}」に向けた支援実績があります`,
@@ -60,7 +74,7 @@ function scoreFutureGoal(facility: Facility, pref: UserPreferences): { score: nu
 }
 
 export function matchFacilities(preferences: UserPreferences, allFacilities: Facility[]): MatchResult[] {
-  const available = allFacilities.filter((f) => !f.isFull);
+  const available = allFacilities.filter((f) => f.additionalInfo.isFull !== true);
 
   const results: MatchResult[] = available.map((facility) => {
     const scores = [
@@ -75,11 +89,13 @@ export function matchFacilities(preferences: UserPreferences, allFacilities: Fac
     const reasons = scores.map((s) => s.reason).filter((r): r is string => r !== null);
 
     if (reasons.length === 0) {
-      reasons.push('総合的な条件からおすすめの事業所です');
+      reasons.push('公開情報をもとにご提案する事業所です（詳細は事業所へご確認ください）');
     }
 
     return { facility, score: totalScore, reasons };
   });
 
-  return results.sort((a, b) => b.score - a.score).slice(0, 3);
+  return results
+    .sort((a, b) => b.score - a.score || a.facility.csv.name.localeCompare(b.facility.csv.name, 'ja'))
+    .slice(0, 3);
 }

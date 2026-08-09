@@ -65,7 +65,7 @@ export function MainApp() {
       </main>
 
       <footer className="app-footer">
-        <p>※ このアプリはデモ版です。事業所情報はすべて架空のものです。</p>
+        <p>※ 事業所情報は WAM NET オープンデータ（2026年8月時点）に基づいています。</p>
       </footer>
 
       {selectedResult && (
