@@ -606,6 +606,111 @@ body {
   color: #c0392b;
 }
 
+/* ── Story strip (circular logos) ── */
+.story-strip {
+  margin: 0 -1.25rem 1.25rem;
+  padding: 0.25rem 0 0.5rem;
+}
+
+.story-strip-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.story-strip-track {
+  display: flex;
+  gap: 0.85rem;
+  width: max-content;
+  padding: 0.35rem 1.25rem;
+  animation: storyMarquee 28s linear infinite;
+}
+
+.story-strip-viewport:hover .story-strip-track,
+.story-strip-viewport:focus-within .story-strip-track {
+  animation-play-state: paused;
+}
+
+@keyframes storyMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-strip-track {
+    animation: none;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 0.5rem;
+  }
+
+  .story-strip-viewport {
+    mask-image: none;
+    overflow-x: auto;
+  }
+}
+
+.story-item {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font-family: var(--font);
+  flex-shrink: 0;
+}
+
+.story-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  padding: 2px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.story-avatar img,
+.story-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: white;
+  object-fit: cover;
+  display: block;
+}
+
+.story-avatar-fallback {
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.story-name {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.25;
+  max-width: 4.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ── Directory ── */
 .facility-directory {
   animation: fadeIn 0.4s ease;

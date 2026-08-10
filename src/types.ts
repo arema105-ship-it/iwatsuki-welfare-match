@@ -38,6 +38,8 @@ export interface FacilityCsvData {
 export interface FacilityAdditionalInfo {
   /** 一覧・詳細で使う短い紹介文 */
   catchphrase: string | null;
+  /** 丸アイコン用画像パス（例: /facilities/fukufuku.png） */
+  logoUrl: string | null;
   workContents: string[] | null;
   atmosphere: 'quiet' | 'lively' | null;
   minDays: number | null;
@@ -91,6 +93,7 @@ export function getFacilityAddress(facility: Facility): string {
 export function hasAdditionalInfo(info: FacilityAdditionalInfo): boolean {
   return (
     info.catchphrase !== null ||
+    info.logoUrl !== null ||
     info.workContents !== null ||
     info.atmosphere !== null ||
     info.minDays !== null ||

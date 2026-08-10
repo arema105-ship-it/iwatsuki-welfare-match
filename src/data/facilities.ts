@@ -2,6 +2,7 @@ import type { Facility } from '../types';
 
 const emptyAdditionalInfo = {
   catchphrase: null,
+  logoUrl: null,
   workContents: null,
   atmosphere: null,
   minDays: null,
@@ -141,6 +142,7 @@ export const facilities: Facility[] = [
     },
     additionalInfo: {
       catchphrase: '軽作業中心／一人ひとりのペースで',
+      logoUrl: '/facilities/fukufuku.png',
       workContents: ['軽作業・組立', '軽飲食・調理補助'],
       atmosphere: 'lively',
       minDays: 1,

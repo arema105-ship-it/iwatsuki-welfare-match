@@ -1,5 +1,6 @@
 import type { Facility } from '../types';
 import { getFacilityAddress } from '../types';
+import { FacilityStoryStrip } from './FacilityStoryStrip';
 
 interface FacilityDirectoryProps {
   facilities: Facility[];
@@ -22,6 +23,8 @@ export function FacilityDirectory({
           岩槻区の就労継続支援B型 {list.length}件（WAM NET掲載）
         </p>
       </div>
+
+      <FacilityStoryStrip facilities={facilities} onSelectFacility={onSelectFacility} />
 
       <div className="directory-list">
         {list.map((facility) => {
