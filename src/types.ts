@@ -36,6 +36,8 @@ export interface FacilityCsvData {
  * 未登録の場合は null
  */
 export interface FacilityAdditionalInfo {
+  /** 一覧・詳細で使う短い紹介文 */
+  catchphrase: string | null;
   workContents: string[] | null;
   atmosphere: 'quiet' | 'lively' | null;
   minDays: number | null;
@@ -88,6 +90,7 @@ export function getFacilityAddress(facility: Facility): string {
 
 export function hasAdditionalInfo(info: FacilityAdditionalInfo): boolean {
   return (
+    info.catchphrase !== null ||
     info.workContents !== null ||
     info.atmosphere !== null ||
     info.minDays !== null ||

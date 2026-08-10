@@ -1,6 +1,7 @@
 import type { Facility } from '../types';
 
 const emptyAdditionalInfo = {
+  catchphrase: null,
   workContents: null,
   atmosphere: null,
   minDays: null,
@@ -138,7 +139,16 @@ export const facilities: Facility[] = [
       capacity: 20,
       serviceType: '就労継続支援Ｂ型',
     },
-    additionalInfo: { ...emptyAdditionalInfo },
+    additionalInfo: {
+      catchphrase: '軽作業中心／一人ひとりのペースで',
+      workContents: ['軽作業・組立', '軽飲食・調理補助'],
+      atmosphere: 'lively',
+      minDays: 1,
+      maxDays: 5,
+      hasTransport: false,
+      futureSupport: ['一般就労（A型・一般企業）', 'まずは安定した通所'],
+      isFull: false,
+    },
   },
   {
     id: '1116506831',

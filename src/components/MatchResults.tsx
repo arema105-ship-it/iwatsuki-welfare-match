@@ -26,6 +26,9 @@ export function MatchResults({ results, onSelectFacility, onReset }: MatchResult
               <div className="result-card-header">
                 <div>
                   <h3>{csv.name}</h3>
+                  {additionalInfo.catchphrase && (
+                    <p className="facility-catchphrase">{additionalInfo.catchphrase}</p>
+                  )}
                   <p className="facility-address">{getFacilityAddress(result.facility)}</p>
                 </div>
               </div>

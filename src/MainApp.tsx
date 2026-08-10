@@ -2,74 +2,137 @@ import { useState } from 'react';
 import { MatchingForm } from './components/MatchingForm';
 import { MatchResults } from './components/MatchResults';
 import { FacilityDetail } from './components/FacilityDetail';
+import { FacilityDirectory } from './components/FacilityDirectory';
+import { BottomTabBar, type MainTab } from './components/BottomTabBar';
+import { InstagramPanel } from './components/InstagramPanel';
+import { NewsPanel } from './components/NewsPanel';
+import { ConsultPanel } from './components/ConsultPanel';
 import { facilities } from './data/facilities';
 import { matchFacilities } from './utils/matching';
-import type { MatchResult, UserPreferences } from './types';
+import type { Facility, MatchResult, UserPreferences } from './types';
 
-type AppStep = 'form' | 'results';
+type DirectoryStep = 'list' | 'form' | 'results';
+
+interface SelectedFacility {
+  facility: Facility;
+  reasons?: string[];
+}
 
 export function MainApp() {
-  const [step, setStep] = useState<AppStep>('form');
+  const [tab, setTab] = useState<MainTab>('directory');
+  const [directoryStep, setDirectoryStep] = useState<DirectoryStep>('list');
   const [results, setResults] = useState<MatchResult[]>([]);
-  const [selectedResult, setSelectedResult] = useState<MatchResult | null>(null);
+  const [selected, setSelected] = useState<SelectedFacility | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const switchTab = (next: MainTab) => {
+    setTab(next);
+    setSelected(null);
+    if (next === 'directory') {
+      setDirectoryStep('list');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openMatching = () => {
+    setTab('directory');
+    setDirectoryStep('form');
+    setSelected(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleSubmit = (preferences: UserPreferences) => {
     setIsLoading(true);
     setTimeout(() => {
       const matched = matchFacilities(preferences, facilities);
       setResults(matched);
-      setStep('results');
+      setDirectoryStep('results');
       setIsLoading(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 600);
   };
 
   const handleReset = () => {
-    setStep('form');
+    setDirectoryStep('form');
     setResults([]);
-    setSelectedResult(null);
+    setSelected(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const headerCopy =
+    tab === 'directory'
+      ? { title: '岩槻のB型事業所', subtitle: '一覧から調べる、条件から探す' }
+      : tab === 'instagram'
+        ? { title: 'インスタグラム', subtitle: '日々の様子をチェック' }
+        : tab === 'news'
+          ? { title: 'お知らせ', subtitle: '最新情報をお届けします' }
+          : { title: 'ご相談', subtitle: '見学・利用のご案内' };
+
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className="app has-bottom-tabs">
+      <header className="app-header app-header-compact">
         <div className="header-inner">
           <div className="header-badge">デモ版</div>
-          <h1>岩槻のB型事業所マッチング（デモ）</h1>
-          <p className="header-subtitle">あなたに合いそうな事業所を3件ご提案</p>
+          <h1>{headerCopy.title}</h1>
+          <p className="header-subtitle">{headerCopy.subtitle}</p>
         </div>
       </header>
 
       <main className="app-main">
-        {step === 'form' && (
+        {tab === 'directory' && directoryStep === 'list' && (
+          <FacilityDirectory
+            facilities={facilities}
+            onSelectFacility={(facility) => setSelected({ facility })}
+            onStartMatching={openMatching}
+          />
+        )}
+
+        {tab === 'directory' && directoryStep === 'form' && (
           <section className="form-section">
             <div className="form-intro">
               <p>
-                5つの質問にお答えいただくと、岩槻周辺の就労継続支援B型事業所の中から、
-                あなたの希望条件に合う事業所を3件ご提案します。
+                5つの質問にお答えいただくと、希望条件に合いそうな事業所を3件ご提案します。
               </p>
             </div>
             <MatchingForm onSubmit={handleSubmit} isLoading={isLoading} />
+            <button
+              type="button"
+              className="btn-outline"
+              style={{ marginTop: '1rem' }}
+              onClick={() => setDirectoryStep('list')}
+            >
+              事業所一覧に戻る
+            </button>
           </section>
         )}
 
-        {step === 'results' && (
+        {tab === 'directory' && directoryStep === 'results' && (
           <MatchResults
             results={results}
-            onSelectFacility={setSelectedResult}
+            onSelectFacility={(result) =>
+              setSelected({ facility: result.facility, reasons: result.reasons })
+            }
             onReset={handleReset}
           />
         )}
+
+        {tab === 'instagram' && <InstagramPanel />}
+        {tab === 'news' && <NewsPanel />}
+        {tab === 'consult' && <ConsultPanel onStartMatching={openMatching} />}
       </main>
 
       <footer className="app-footer">
         <p>※ 事業所情報は WAM NET オープンデータ（2026年8月時点）に基づいています。</p>
       </footer>
 
-      {selectedResult && (
-        <FacilityDetail result={selectedResult} onClose={() => setSelectedResult(null)} />
+      <BottomTabBar active={tab} onChange={switchTab} />
+
+      {selected && (
+        <FacilityDetail
+          facility={selected.facility}
+          reasons={selected.reasons}
+          onClose={() => setSelected(null)}
+        />
       )}
     </div>
   );
