@@ -59,22 +59,30 @@ export function MainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const headerCopy =
+  const tabSubtitle =
     tab === 'directory'
-      ? { title: '岩槻のB型事業所', subtitle: '一覧から調べる、条件から探す' }
+      ? '岩槻のB型事業所 — 一覧から調べる、条件から探す'
       : tab === 'instagram'
-        ? { title: 'インスタグラム', subtitle: '日々の様子をチェック' }
+        ? '日々の様子をチェック'
         : tab === 'news'
-          ? { title: 'お知らせ', subtitle: '最新情報をお届けします' }
-          : { title: 'ご相談', subtitle: '見学・利用のご案内' };
+          ? '最新情報をお届けします'
+          : '見学・利用のご案内';
 
   return (
     <div className="app has-bottom-tabs">
       <header className="app-header app-header-compact">
         <div className="header-inner">
           <div className="header-badge">デモ版</div>
-          <h1>{headerCopy.title}</h1>
-          <p className="header-subtitle">{headerCopy.subtitle}</p>
+          <h1 className="brand-lockup">
+            <img
+              className="brand-logo"
+              src="/kompass-logo.jpg"
+              alt="kompass — 人を知る。支援が変わる。"
+              width={320}
+              height={160}
+            />
+          </h1>
+          <p className="header-subtitle">{tabSubtitle}</p>
         </div>
       </header>
 
