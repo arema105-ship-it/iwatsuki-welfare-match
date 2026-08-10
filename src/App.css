@@ -187,6 +187,47 @@ body {
   font-size: 0.8rem !important;
 }
 
+.instagram-account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.instagram-account-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 0.9rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.instagram-account-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.instagram-account-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.instagram-account-text strong {
+  font-size: 1rem;
+}
+
+.instagram-account-text span {
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
 .news-list {
   list-style: none;
   display: flex;
@@ -667,6 +708,8 @@ body {
   cursor: pointer;
   font-family: var(--font);
   flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
 .story-avatar {

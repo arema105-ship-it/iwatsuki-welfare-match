@@ -30,19 +30,13 @@ export function FacilityStoryStrip({ facilities, onSelectFacility }: FacilitySto
       <div className="story-strip-viewport">
         <div className="story-strip-track">
           {loopItems.map((facility, index) => {
-            const { logoUrl } = facility.additionalInfo;
+            const { logoUrl, instagramUrl } = facility.additionalInfo;
             const label = shortLabel(facility.csv.name);
             const isDuplicate = index >= ordered.length;
-
-            return (
-              <button
-                key={`${facility.id}-${index}`}
-                type="button"
-                className="story-item"
-                onClick={() => onSelectFacility(facility)}
-                tabIndex={isDuplicate ? -1 : 0}
-                aria-hidden={isDuplicate || undefined}
-              >
+            const sharedClassName = 'story-item';
+            const sharedTabIndex = isDuplicate ? -1 : 0;
+            const avatar = (
+              <>
                 <span className={`story-avatar${logoUrl ? ' has-logo' : ''}`}>
                   {logoUrl ? (
                     <img src={logoUrl} alt="" />
@@ -51,6 +45,37 @@ export function FacilityStoryStrip({ facilities, onSelectFacility }: FacilitySto
                   )}
                 </span>
                 <span className="story-name">{label}</span>
+              </>
+            );
+
+            if (instagramUrl) {
+              return (
+                <a
+                  key={`${facility.id}-${index}`}
+                  className={sharedClassName}
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tabIndex={sharedTabIndex}
+                  aria-hidden={isDuplicate || undefined}
+                  aria-label={`${label}のInstagramを開く`}
+                  title="Instagramを開く"
+                >
+                  {avatar}
+                </a>
+              );
+            }
+
+            return (
+              <button
+                key={`${facility.id}-${index}`}
+                type="button"
+                className={sharedClassName}
+                onClick={() => onSelectFacility(facility)}
+                tabIndex={sharedTabIndex}
+                aria-hidden={isDuplicate || undefined}
+              >
+                {avatar}
               </button>
             );
           })}

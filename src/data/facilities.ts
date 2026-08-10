@@ -3,6 +3,7 @@ import type { Facility } from '../types';
 const emptyAdditionalInfo = {
   catchphrase: null,
   logoUrl: null,
+  instagramUrl: null,
   workContents: null,
   atmosphere: null,
   minDays: null,
@@ -115,7 +116,11 @@ export const facilities: Facility[] = [
       capacity: 20,
       serviceType: '就労継続支援Ｂ型',
     },
-    additionalInfo: { ...emptyAdditionalInfo },
+    additionalInfo: {
+      ...emptyAdditionalInfo,
+      logoUrl: '/facilities/fukufuku-higashicho.png',
+      instagramUrl: 'https://www.instagram.com/fukufukukuru29/',
+    },
   },
   {
     id: '1116507243',
@@ -143,6 +148,7 @@ export const facilities: Facility[] = [
     additionalInfo: {
       catchphrase: '軽作業中心／一人ひとりのペースで',
       logoUrl: '/facilities/fukufuku.png',
+      instagramUrl: 'https://www.instagram.com/fukufuku.honchou/',
       workContents: ['軽作業・組立', '軽飲食・調理補助'],
       atmosphere: 'lively',
       minDays: 1,

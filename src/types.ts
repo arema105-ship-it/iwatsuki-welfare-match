@@ -40,6 +40,8 @@ export interface FacilityAdditionalInfo {
   catchphrase: string | null;
   /** 丸アイコン用画像パス（例: /facilities/fukufuku.png） */
   logoUrl: string | null;
+  /** InstagramプロフィールURL（丸アイコンタップで開く） */
+  instagramUrl: string | null;
   workContents: string[] | null;
   atmosphere: 'quiet' | 'lively' | null;
   minDays: number | null;
@@ -94,6 +96,7 @@ export function hasAdditionalInfo(info: FacilityAdditionalInfo): boolean {
   return (
     info.catchphrase !== null ||
     info.logoUrl !== null ||
+    info.instagramUrl !== null ||
     info.workContents !== null ||
     info.atmosphere !== null ||
     info.minDays !== null ||
