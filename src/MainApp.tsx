@@ -66,7 +66,7 @@ export function MainApp() {
         ? '日々の様子をチェック'
         : tab === 'news'
           ? '最新情報をお届けします'
-          : '見学・利用のご案内';
+          : '人を知る。支援が変わる。';
 
   return (
     <div className="app has-bottom-tabs">
